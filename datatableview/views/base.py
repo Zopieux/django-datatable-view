@@ -43,9 +43,9 @@ class DatatableJSONResponseMixin(object):
         datatable.populate_records()
 
         response_data = {
-            'draw': self.request.GET.get('draw', None),
-            'recordsFiltered': datatable.total_initial_record_count,
-            'recordsTotal': datatable.unpaged_record_count,
+            'draw': int(self.request.GET.get('draw', None)),
+            'recordsFiltered': datatable.unpaged_record_count,
+            'recordsTotal': datatable.total_initial_record_count,
             'data': [dict(record, **{
                 'DT_RowId': record.pop('pk'),
                 'DT_RowData': record.pop('_extra_data'),

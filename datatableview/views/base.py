@@ -43,7 +43,6 @@ class DatatableJSONResponseMixin(object):
         datatable.populate_records()
 
         response_data = {
-            'draw': int(self.request.GET.get('draw', None)),
             'recordsFiltered': datatable.unpaged_record_count,
             'recordsTotal': datatable.total_initial_record_count,
             'data': [dict(record, **{
@@ -51,6 +50,10 @@ class DatatableJSONResponseMixin(object):
                 'DT_RowData': record.pop('_extra_data'),
             }) for record in datatable.get_records()],
         }
+        try:
+            response_data['draw'] = int(self.request.GET.get('draw'))
+        except TypeError:
+            pass
         return response_data
 
     def serialize_to_json(self, response_data):
